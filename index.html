@@ -50,10 +50,12 @@
         position: absolute;
         inset: 0;
         z-index: 1;
-        pointer-events: none;
+        pointer-events: auto;
       }
 
       .bubble {
+        appearance: none;
+        border: none;
         position: absolute;
         padding: 12px 18px;
         border-radius: 999px;
@@ -71,6 +73,50 @@
         box-shadow: 0 12px 30px rgba(35, 45, 60, 0.18);
         backdrop-filter: blur(4px);
         animation: float 9s ease-in-out infinite;
+        cursor: pointer;
+        transition: transform 0.35s ease, box-shadow 0.35s ease,
+          border-color 0.35s ease, background 0.35s ease;
+      }
+
+      .bubble:focus-visible {
+        outline: 2px solid rgba(30, 38, 50, 0.5);
+        outline-offset: 2px;
+      }
+
+      .bubble.is-open {
+        border-radius: 24px;
+        padding: 18px 22px;
+        max-width: min(320px, 70vw);
+        text-transform: none;
+        letter-spacing: 0.02em;
+        line-height: 1.4;
+        background: linear-gradient(
+          160deg,
+          rgba(255, 255, 255, 0.96),
+          rgba(198, 206, 218, 0.98)
+        );
+        border-color: rgba(90, 100, 120, 0.35);
+        box-shadow: 0 18px 40px rgba(25, 32, 44, 0.25);
+        animation-play-state: paused;
+        transform: translateY(-6px) scale(1.02);
+      }
+
+      .bubble .title {
+        display: block;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        margin-bottom: 6px;
+      }
+
+      .bubble .blurb {
+        display: none;
+        font-size: clamp(12px, 1.2vw, 15px);
+        color: #2a3442;
+      }
+
+      .bubble.is-open .blurb {
+        display: block;
       }
 
       .bubble--architecture {
@@ -198,6 +244,10 @@
           top: 84%;
           right: 8%;
         }
+
+        .bubble.is-open {
+          max-width: 78vw;
+        }
       }
 
       @media (max-width: 420px) {
@@ -217,10 +267,33 @@
   <body>
     <canvas id="scene"></canvas>
     <div class="bubbles">
-      <div class="bubble bubble--architecture">Architecture systems</div>
-      <div class="bubble bubble--engineering">Engineering precision</div>
-      <div class="bubble bubble--sound">Sound design craft</div>
-      <div class="bubble bubble--film">Film + media vision</div>
+      <button class="bubble bubble--architecture" type="button">
+        <span class="title">Architecture systems</span>
+        <span class="blurb">
+          Spatial concepts, material strategy, and clean execution that turns
+          form into a precise experience.
+        </span>
+      </button>
+      <button class="bubble bubble--engineering" type="button">
+        <span class="title">Engineering precision</span>
+        <span class="blurb">
+          Structural rigor, thoughtful integration, and performance-first
+          decisions for resilient builds.
+        </span>
+      </button>
+      <button class="bubble bubble--sound" type="button">
+        <span class="title">Sound design craft</span>
+        <span class="blurb">
+          Sonic identity tuned for clarity and impact, from texture design to
+          final mix.
+        </span>
+      </button>
+      <button class="bubble bubble--film" type="button">
+        <span class="title">Film + media vision</span>
+        <span class="blurb">
+          Narrative, pacing, and visual tone aligned to bring concepts to life.
+        </span>
+      </button>
     </div>
     <div id="wavy">StahlMac</div>
     <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
@@ -291,6 +364,18 @@
       }
 
       animate();
+    </script>
+    <script>
+      const bubbles = document.querySelectorAll(".bubble");
+      bubbles.forEach((bubble) => {
+        bubble.addEventListener("click", () => {
+          const isOpen = bubble.classList.contains("is-open");
+          bubbles.forEach((item) => item.classList.remove("is-open"));
+          if (!isOpen) {
+            bubble.classList.add("is-open");
+          }
+        });
+      });
     </script>
   </body>
 </html>
