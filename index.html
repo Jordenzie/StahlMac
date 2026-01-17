@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Wavy Text</title>
+    <style>
+      :root {
+        --bg: #0b0b0b;
+        --fg: #f2f2f2;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+      }
+
+      body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--bg);
+        color: var(--fg);
+        overflow: hidden;
+      }
+
+      #wavy {
+        font-family: "Chalkduster", "Marker Felt", "Comic Sans MS", cursive;
+        font-size: clamp(32px, 6vw, 96px);
+        letter-spacing: 0.08em;
+        white-space: nowrap;
+        text-transform: none;
+      }
+
+      #wavy span {
+        display: inline-block;
+        animation: wave 1.6s ease-in-out infinite;
+      }
+
+      @keyframes wave {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-14px);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="wavy">Your text here</div>
+    <script>
+      const target = document.getElementById("wavy");
+      const content = target.textContent;
+      target.textContent = "";
+
+      [...content].forEach((char, index) => {
+        const span = document.createElement("span");
+        span.textContent = char === " " ? "\u00A0" : char;
+        span.style.animationDelay = `${index * 0.08}s`;
+        target.appendChild(span);
+      });
+    </script>
+  </body>
+</html>
